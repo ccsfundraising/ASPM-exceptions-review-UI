@@ -24,7 +24,7 @@ os.makedirs(OUTPUT_DIR, exist_ok=True)
 # PAGE CONFIG
 # =========================================================
 st.set_page_config(
-    page_title="Parish Match Review",
+    page_title="ASPM: Parish-RE Database Match Exceptions Review",
     layout="wide",
     initial_sidebar_state="collapsed"
 )
