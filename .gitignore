@@ -1,0 +1,9 @@
+venv/
+__pycache__/
+*.pyc
+.DS_Store
+
+# runtime data (VERY important for your app)
+decisions.db
+review_decisions.csv
+binary_resolution.csv
