@@ -17,7 +17,9 @@ EXCEPTIONS_FILE = BASE_DIR / "all_parishes_flat_for_ncoa_appended_match_exceptio
 
 # Writable runtime directory
 # Uses environment variable if provided, otherwise falls back to /tmp
-OUTPUT_DIR = Path(os.environ.get("APP_DATA_DIR", tempfile.gettempdir())) / "aspm_exceptions_review_ui"
+# OUTPUT_DIR = Path(os.environ.get("APP_DATA_DIR", tempfile.gettempdir())) / "aspm_exceptions_review_ui"
+
+OUTPUT_DIR = Path("/aspm-apps/aspm-match-app") / "aspm_exceptions_review_ui"
 OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
 DB_FILE = OUTPUT_DIR / "decisions.db"
