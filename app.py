@@ -5,19 +5,24 @@ from datetime import datetime
 import sqlite3
 import pandas as pd
 import streamlit as st
-
+import tempfile
 
 # =========================================================
 # PATHS
 # =========================================================
-EXCEPTIONS_FILE = "/Users/yashakaushal/Documents/ASPM/Parish RAW Data/wave3/matching/matched_output/all_parishes_flat_for_ncoa_appended_match_exceptions.xlsx"
-OUTPUT_DIR = "/Users/yashakaushal/Documents/ASPM/Parish RAW Data/wave3/matching/app_matching/"
+BASE_DIR = Path(__file__).resolve().parent
 
-DB_FILE = os.path.join(OUTPUT_DIR, "decisions.db")
-DECISIONS_FILE = os.path.join(OUTPUT_DIR, "review_decisions.csv")
-BINARY_FILE = os.path.join(OUTPUT_DIR, "binary_resolution.csv")
+# Put the exceptions file in the same repo/folder as app.py before deploying
+EXCEPTIONS_FILE = BASE_DIR / "all_parishes_flat_for_ncoa_appended_match_exceptions.xlsx"
 
-os.makedirs(OUTPUT_DIR, exist_ok=True)
+# Writable runtime directory
+# Uses environment variable if provided, otherwise falls back to /tmp
+OUTPUT_DIR = Path(os.environ.get("APP_DATA_DIR", tempfile.gettempdir())) / "aspm_exceptions_review_ui"
+OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
+
+DB_FILE = OUTPUT_DIR / "decisions.db"
+DECISIONS_FILE = OUTPUT_DIR / "review_decisions.csv"
+BINARY_FILE = OUTPUT_DIR / "binary_resolution.csv"
 
 
 # =========================================================
@@ -90,7 +95,7 @@ st.markdown("""
 # SQLITE SETUP
 # =========================================================
 def get_conn():
-    conn = sqlite3.connect(DB_FILE, timeout=30)
+    conn = sqlite3.connect(str(DB_FILE), timeout=30)
     conn.execute("PRAGMA journal_mode=WAL;")
     conn.execute("PRAGMA busy_timeout = 30000;")
     return conn
@@ -705,7 +710,7 @@ st.subheader("Current Outputs")
 d1, d2 = st.columns(2)
 
 with d1:
-    if os.path.exists(DECISIONS_FILE):
+    if DECISIONS_FILE.exists():
         with open(DECISIONS_FILE, "rb") as f:
             st.download_button(
                 "Download review_decisions.csv",
@@ -716,7 +721,7 @@ with d1:
             )
 
 with d2:
-    if os.path.exists(BINARY_FILE):
+    if BINARY_FILE.exists():
         with open(BINARY_FILE, "rb") as f:
             st.download_button(
                 "Download binary_resolution.csv",
