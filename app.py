@@ -627,17 +627,17 @@ with left_col:
 with right_col:
     top_right_cols = st.columns(2, gap="large")
 
-    for j, (_, cand_row) in enumerate(top_candidates):
+    for j, (row_idx, cand_row) in enumerate(top_candidates):
         with top_right_cols[j]:
             render_candidate_card(parish_row, cand_row)
-
+    
             rank = safe_get(cand_row, "candidate_rank")
             consid = safe_get(cand_row, "candidate_consid")
             conscode = safe_get(cand_row, "candidate_conscode")
-
+    
             if st.button(
                 f"Match Candidate {rank}",
-                key=f"match_{current_uniqueid}_{rank}_{consid}",
+                key=f"match_{current_uniqueid}_{rank}_{consid}_{row_idx}",
                 use_container_width=True
             ):
                 notes_val = st.session_state.get(f"notes_{current_uniqueid}", "")
@@ -664,17 +664,17 @@ if remaining_candidates:
             row_candidates = remaining_candidates[start:start + 2]
             cand_cols = st.columns(2, gap="large")
 
-            for j, (_, cand_row) in enumerate(row_candidates):
+            for j, (row_idx, cand_row) in enumerate(row_candidates):
                 with cand_cols[j]:
                     render_candidate_card(parish_row, cand_row)
-
+            
                     rank = safe_get(cand_row, "candidate_rank")
                     consid = safe_get(cand_row, "candidate_consid")
                     conscode = safe_get(cand_row, "candidate_conscode")
-
+            
                     if st.button(
                         f"Match Candidate {rank}",
-                        key=f"match_{current_uniqueid}_{rank}_{consid}",
+                        key=f"match_{current_uniqueid}_{rank}_{consid}_{row_idx}",
                         use_container_width=True
                     ):
                         notes_val = st.session_state.get(f"notes_{current_uniqueid}", "")
